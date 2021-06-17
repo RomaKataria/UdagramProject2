@@ -21,8 +21,26 @@ Resources:
                 - ec2.amazonaws.com
             Action:
               - 'sts:AssumeRole'
-      ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
+      #ManagedPolicyArns:
+       # - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
+
+  RolePolicies:
+        Type: AWS::IAM::Policy
+        Properties:
+            PolicyName: AmazonS3ReadOnlyAccess
+            PolicyDocument:
+                Version: '2012-10-17'
+                Statement:
+                - 
+                    Effect: Allow
+                    Action: 
+                    -   s3:Get*
+                    -   s3:List*
+                    Resource: 
+                    -   arn:aws:s3:::udacityrk
+                    -   arn:aws:s3:::udacityrk/*
+            Roles:
+            -   Ref: S3ReadonlyOnlyAccess
 
 
 # Insatnce Profile
@@ -80,11 +98,15 @@ Resources:
           #!/bin/bash
           sudo apt-get update -y
           sudo apt-get install apache2 -y
+          sudo apt install awscli -y
+          sudo apt install unzip -y
           sudo systemctl start apache2.service 
           cd /var/www/html
-          aws s3 cp s3://udacityrk/udacity.zip .
-          unzip -o udacity.zip    
+          chmod 777 index.html
+          aws s3 cp s3://udacityrk/Udacity.zip .
+          unzip -oj Udacity.zip
       ImageId: ami-090717c950a5c34d3
+      KeyName: udagram
       IamInstanceProfile: !Ref EC2InstanceProfileRK
       SecurityGroups:
       - Ref: WebServerSecGroup
@@ -115,9 +137,10 @@ Resources:
       VPCZoneIdentifier:
       - Fn::ImportValue: 
           !Sub "${EnvironmentName}-PRIV-NETS"
+         ##!Sub "${EnvironmentName}-PUB-NETS"
       LaunchConfigurationName:
         Ref: WebAppLaunchConfig
-      MinSize: '2'
+      MinSize: '1'
       MaxSize: '5'
       TargetGroupARNs:
       - Ref: WebAppTargetGroup
