@@ -21,27 +21,27 @@ Resources:
                 - ec2.amazonaws.com
             Action:
               - 'sts:AssumeRole'
-      #ManagedPolicyArns:
-       # - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
+    
 
   RolePolicies:
-        Type: AWS::IAM::Policy
-        Properties:
-            PolicyName: AmazonS3ReadOnlyAccess
-            PolicyDocument:
-                Version: '2012-10-17'
-                Statement:
-                - 
-                    Effect: Allow
-                    Action: 
-                    -   s3:Get*
-                    -   s3:List*
-                    Resource: 
-                    -   arn:aws:s3:::udacityrk
-                    -   arn:aws:s3:::udacityrk/*
-            Roles:
-            -   Ref: S3ReadonlyOnlyAccess
+    Type: AWS::IAM::Policy
+    Properties:
+        PolicyName: AmazonS3ReadOnlyAccess
+        PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - 
+                Effect: Allow
+                Action: 
+                -   s3:Get*
+                -   s3:List*
+                Resource: 
+                -   arn:aws:s3:::udacityrk
+                -   arn:aws:s3:::udacityrk/*
+        Roles:
+        -   Ref: S3ReadonlyOnlyAccess
 
+  
 
 # Insatnce Profile
   EC2InstanceProfileRK:
@@ -106,7 +106,6 @@ Resources:
           aws s3 cp s3://udacityrk/Udacity.zip .
           unzip -oj Udacity.zip
       ImageId: ami-090717c950a5c34d3
-      KeyName: udagram
       IamInstanceProfile: !Ref EC2InstanceProfileRK
       SecurityGroups:
       - Ref: WebServerSecGroup
@@ -136,8 +135,7 @@ Resources:
     Properties:
       VPCZoneIdentifier:
       - Fn::ImportValue: 
-          !Sub "${EnvironmentName}-PRIV-NETS"
-         ##!Sub "${EnvironmentName}-PUB-NETS"
+         !Sub "${EnvironmentName}-PRIV-NETS"
       LaunchConfigurationName:
         Ref: WebAppLaunchConfig
       MinSize: '1'
