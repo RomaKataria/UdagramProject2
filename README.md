@@ -8,4 +8,9 @@ Output Link -
 
 LoadBalancer DNS Link - http://Udagr-WebAp-1GACC34LCQAJJ-633993937.us-west-2.elb.amazonaws.com
 
+----------------
+
+Based on the review comments, I have re-created the stacks and the url is now up and running. Below is the new Loadbalancer url.
+
+New Loadbalancer DNS Link - http://Udagr-WebAp-1R9ZHBRC9V5DS-826524060.us-west-2.elb.amazonaws.com
 
